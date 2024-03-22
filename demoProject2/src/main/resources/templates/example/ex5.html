@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>타임리프 예제 5</title>
+
+    <style>
+        .red{color : red;}
+        .blue{color : blue;}
+
+        .deco{text-decoration: underline;}
+    </style>
+</head>
+<body>
+    <h1>타임리프 예제 5</h1>   
+
+    <h3>th:inline = "javascript" 속성</h3>
+    <pre>
+        -script 태그에 작성하는 속성
+
+        -타임리프 문법으로 출력된 내용/값을 
+        JS에 알맞은 타입으로 변환
+    </pre>
+
+    <h3 id="message"></h3>
+
+    <h3 id="num1"></h3>
+
+    <hr>
+
+    <h3> th:classappend 속성 : 요소에 class 속성 값을 동적으로 추가 </h3>
+
+    <h4 th:classappend="red">th:classappend 테스트중 ... </h4>
+
+    <h4 class="red" th:classappend="deco">th:classappend 테스트중 ... </h4>
+
+    <!-- num1이 10000 보다 클 경우 -->
+    <h4 th:classappend="${num1 gt 10000} ? blue : red">th:classappend 테스트중 ... </h4>
+
+
+    <hr>
+
+    <h3>안전 탐색 연산자 : ${객체?.필드}</h3>
+    <pre>
+ - 객체가 null인지 판단 후 null이 아닌 경우에 수행
+    </pre>
+
+    <!-- std가 null인 경우 원래는 오류 발생
+        -> 안전 탐색 연산자를 쓰면 오류 발생 X
+    -->
+    <h4 th:text="${std?.studentNo}">학번</h4>
+
+    <hr>
+
+    <h3>${#numbers.sequence(시작,끝[,step])} : 번호 발생기</h3>
+
+    <pre>
+        - 시작부터 끝 까지 번호로만 이루어진 숫자 배열 생성
+
+        ex) ${#numbers.sequence(1,5)} => [1,2,3,4,5]
+
+        [왜 사용할까 ???]
+        - 타임리프 반복문 th:each 는 향상된 for문으로 
+        일반 for문의 동작(시작부터 끝까지 몇씩 증가하며 반복)
+        을 못하기 때문에 이를 해결하기 위해서 사용
+    </pre>
+
+    <ul>
+        <li th:each="i : ${#numbers.sequence(11,20,2)}" 
+        th:text="|테스트 ${i}|" ></li>
+    </ul>
+
+
+
+    <script th:inline = "javascript">
+        // JS Inline - Natural Template
+        // - HTML 파일 독립 실행 시
+        // JS 내부 타임리프 코드 오류를 발생하지 않게 함
+
+        // + HTML 문법오류(컴파일 오류)도 해결
+
+        const message = /*[[${message}]]*/ "message값";
+
+        const num1 = /*[[${num1}]]*/ 100;
+
+        document.querySelector("#message").innerText = message;
+        document.querySelector("#num1").innerText = num1;
+    </script>
+    
+
+
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TodoList - Boot</title>
+</head>
+<body>
+  <h1>Todo List</h1>
+  <hr>
+
+  <form action="/todo/add" method="POST">
+    <h4>할 일 추가</h4>
+
+    <div>
+      제목 : <input type="text" name="todoTitle">
+    </div>
+
+    <div>
+      <textarea name="todoContent" 
+        cols="50" rows="5" placeholder="상세 내용"></textarea>
+    </div>
+
+    <button>추가 하기</button>
+
+  </form>
+
+  <hr>
+
+  <h3>
+    전체 Todo 개수 : 0개 
+    / 
+    완료된 Todo 개수 : 0개 
+  </h3>
+
+  <h3 th:text="|전체 Todo 개수 : ${#lists.size(todoList)}개 
+               / 완료된 Todo 개수: ${completeCount} 개|"></h3>
+
+  <table border="1" style="border-collapse: collapse;">
+
+    <thead>
+      <th>번호</th>
+      <th>할 일 제목</th>
+      <th>완료 여부</th>
+      <th>등록 날짜</th>
+    </thead>
+
+
+    <tbody>
+    
+      <tr th:each="todo : ${todoList}" th:object="${todo}">
+        <td th:text="*{todoNo}">할 일 번호</td>
+        <td>
+          <a th:href="@{/todo/detail(todoNo=*{todoNo})}" th:text="*{todoTitle}">할 일 제목</a>
+        </td>
+        <td th:text="*{complete}">완료 여부(Y/N)</td>
+        <td th:text="*{regDate}">등록일</td>
+      </tr>
+
+    </tbody>
+  </table>
+
+  <!-- 타임리프 값을 JS 자료형 맞게 변환 -->
+  <script th:inline="javascript">
+    const message = /*[[${message}]]*/ "전달 받은 메세지";
+                    // 전달 받은 message가 없으면 null
+
+    if(message != null){
+        alert(message);
+    }
+  </script>
+
+</body>
+</html>

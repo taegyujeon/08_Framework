@@ -23,4 +23,25 @@ WHERE MEMBER_EMAIL = #{memberEmail}
 AND   MEMBER_DEL_FL = 'N'
 </select>
 
+<!-- 회원 가입 -->
+<!-- parameterType="Member" 생략 가능!! -->
+<!-- insert/update/delete 결과가 모두 행의 개수(int) resultType 작성 X-->
+<insert id="signup">
+	
+	INSERT INTO "MEMBER"
+	VALUES(SEQ_MEMBER_NO.NEXTVAL,
+			 #{memberEmail},
+			 #{memberPw},
+			 #{memberNickname},
+			 #{memberTel},
+			 #{memberAddress},
+			 NULL,
+			 DEFAULT,
+			 DEFAULT,
+			 DEFAULT
+	)
+</insert>
+
+
+
 </mapper>

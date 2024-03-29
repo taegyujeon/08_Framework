@@ -93,17 +93,17 @@
         <label for="memberAddress">주소</label>
 
         <div class="signUp-input-area">
-          <input type="text" name="memberAddress" placeholder="우편번호" maxlength="6" id="sample6_postcode">                  
+          <input type="text" name="memberAddress" placeholder="우편번호" maxlength="6" id="postcode">                  
           
-                <button type="button" onclick="sample6_execDaumPostcode()">검색</button>
+                <button type="button" id="searchAddress">검색</button>
         </div>
 
         <div class="signUp-input-area">
-          <input type="text" name="memberAddress" placeholder="도로명/지번 주소" id="sample6_address">
+          <input type="text" name="memberAddress" placeholder="도로명/지번 주소" id="address">
         </div>
 
         <div class="signUp-input-area">
-          <input type="text" name="memberAddress" placeholder="상세 주소" id="sample6_detailAddress">
+          <input type="text" name="memberAddress" placeholder="상세 주소" id="detailAddress">
         </div>
 
         <button id="signUpBtn">가입하기</button>
@@ -113,6 +113,20 @@
 
   <!-- 푸터 추가 -->
   <th:block th:replace="~{common/footer}"></th:block>
+
+  <!-- script 태그가 여러 개로 나뉘어 있어도 
+       HTML 랜더링 시 큰 한 장의 JS 파일로 변환 된다고 생각!
+
+       (단,윗쪽 script에서 해석 안된 아래쪽 script는 호출 불가)
+   -->
+
+
+
+  <!-- 다음 주소 APi -->
+  <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
+  <!-- 회원 가입 JS 추가 -->
+  <script src="/js/member/signup.js"></script>
 
 </body>
 </html>!

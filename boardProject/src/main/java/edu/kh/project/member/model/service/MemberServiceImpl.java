@@ -94,6 +94,21 @@ public class MemberServiceImpl implements MemberService{
 	}
 	
 	
+	@Override
+	public int checkEmail(String memberEmail) {
+		return mapper.checkEmail(memberEmail);
+	}
+	
+	
+	// 닉네임 중복 검사
+	@Override
+	public int checkNickname(String memberNickname) {
+		return mapper.checkNickname(memberNickname);
+	}
+	
+	
+	
+	
 }
 
 

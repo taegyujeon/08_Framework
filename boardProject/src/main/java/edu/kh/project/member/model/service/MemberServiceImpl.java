@@ -1,5 +1,7 @@
 package edu.kh.project.member.model.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -104,6 +106,28 @@ public class MemberServiceImpl implements MemberService{
 	@Override
 	public int checkNickname(String memberNickname) {
 		return mapper.checkNickname(memberNickname);
+	}
+	
+	// 빠른 로그인
+	// -> 일반 로그인에서 비밀번호 비교만 제외
+	@Override
+	public Member quickLigin(String memberEmail) {
+		
+		Member loginMember = mapper.login(memberEmail);
+		
+		// 탈퇴 또는 없는 회원
+		if(loginMember == null) return null;
+		
+		// 조회된 비밀번호 null로 변경
+		loginMember.setMemberPw(null);
+		return loginMember;
+	}
+	
+	// 회원 목록 조회
+	@Override
+	public List<Member> memberList(){
+		
+		return mapper.selectAll();
 	}
 	
 	

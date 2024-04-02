@@ -1,5 +1,7 @@
 package edu.kh.project.member.model.service;
 
+import java.util.List;
+
 import edu.kh.project.member.model.dto.Member;
 
 public interface MemberService {
@@ -28,6 +30,18 @@ public interface MemberService {
 	 * @return
 	 */
 	int checkNickname(String memberNickname);
+
+	/** 빠른 로그인
+	 * @param memberEmail
+	 * @return loginMember
+	 */
+	Member quickLigin(String memberEmail);
+
+	
+	/** 회원 목록 조회
+	 * @return memberList
+	 */
+	List<Member> memberList();
 
 
 }

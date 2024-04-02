@@ -60,6 +60,11 @@ AND   MEMBER_DEL_FL = 'N'
 	AND MEMBER_NICKNAME = #{memberNickname}
 </select>
 
+<!-- 회원 목록  -->
+<select id="selectAll" resultType="Member">
+SELECT MEMBER_NO,MEMBER_EMAIL,MEMBER_NICKNAME,MEMBER_DEL_FL
+FROM "MEMBER"
+</select>
 
 
 

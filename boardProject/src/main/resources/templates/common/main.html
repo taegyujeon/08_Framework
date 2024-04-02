@@ -20,8 +20,32 @@
             <section class="content-1">
                 <!-- 확인,보충 등등 그때 그때 사용 -->
 
-                <!-- session에 loginMember 있으면 출력 -->
-                <th:block th:text="${session.loginMember}"></th:block>
+                <h3>빠른 로그인</h3>
+                <button class="quick-login">member01@kh.or.kr</button>
+                <button class="quick-login">member02@kh.co.kr</button>
+                <button class="quick-login">tgjeon1104@naver.com</button>
+
+                <hr>
+
+                <h3>
+                    회원 목록 조회(비동기)
+                    <button id="selectMemberList">조회</button>
+                </h3>
+
+                <table border="1" style="border-collapse: collapse;">
+                    <thead>
+                        <th>회원 번호</th>
+                        <th>이메일</th>
+                        <th>닉네임</th>
+                        <th>탈퇴여부</th>
+                    </thead>
+
+                    <tbody id="memberList">
+
+                    </tbody>
+
+                </table>
+
 
             </section>
             <section class="content-2">
@@ -41,7 +65,7 @@
                                        placeholder="이메일"
                                 >
     
-                                <input type="text"
+                                <input type="password"
                                        name="memberPw"
                                        placeholder="비밀번호"
                                 >

@@ -117,6 +117,11 @@ AND AUTH_KEY = #{위 이메일로 보낸 인증번호}
 ROLLBACK;
 
 
+UPDATE "MEMBER" 
+SET  MEMBER_ADDRESS = 'A^^^B^^^C' 
+WHERE 
+
+
 
 
 

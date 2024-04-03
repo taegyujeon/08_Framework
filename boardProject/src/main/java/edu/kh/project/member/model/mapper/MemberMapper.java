@@ -42,7 +42,7 @@ public interface MemberMapper {
 	/** 회원 목록 조회
 	 * 
 	 */
-	List<Member> selectAll();
+	List<Member> selectmemberList();
 	
 	
 	

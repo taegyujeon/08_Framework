@@ -41,7 +41,7 @@ public interface MemberService {
 	/** 회원 목록 조회
 	 * @return memberList
 	 */
-	List<Member> memberList();
+	List<Member> selectmemberList();
 
 
 }

@@ -60,10 +60,16 @@ AND   MEMBER_DEL_FL = 'N'
 	AND MEMBER_NICKNAME = #{memberNickname}
 </select>
 
+
+<!-- 
+	resultType 작성 시 한 행의 결과를 저장할 
+	자료형(int, double, String 등), Map, DTO를 작성
+ -->
 <!-- 회원 목록  -->
-<select id="selectAll" resultType="Member">
+<select id="selectmemberList" resultType="Member">
 SELECT MEMBER_NO,MEMBER_EMAIL,MEMBER_NICKNAME,MEMBER_DEL_FL
 FROM "MEMBER"
+ORDER BY MEMBER_NO
 </select>
 
 

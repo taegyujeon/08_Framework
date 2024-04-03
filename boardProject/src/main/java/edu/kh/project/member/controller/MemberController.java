@@ -239,12 +239,13 @@ public class MemberController {
 	
 	/* 회원 목록 조회 */
 	@ResponseBody
-	@GetMapping("selectList")
-	public List<Member> selectList() {
+	@GetMapping("selectMemberList")
+	public List<Member> selectmemberList() {
 		
-		List<Member> memberList = service.memberList();
-		
-		return memberList;
+		// (java)List 
+		// -> (Spring)HttpMessageConverter가 (JS)JSON(문자열)로 변경
+		// -> response.json() -> [{},{},{}] JS 객체 배열
+		return service.selectmemberList();
 	}
 	
 	

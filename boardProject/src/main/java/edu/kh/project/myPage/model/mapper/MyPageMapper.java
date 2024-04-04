@@ -20,5 +20,19 @@ public interface MyPageMapper {
 	String currPw(Member loginMember);
 
 	int changePw(Member loginMember);
+	
+	
+	/** 비번 조회
+	 * @param loginMember
+	 * @return result
+	 */
+	String inputPw(Member loginMember);
+	
+	
+	/** N/Y 변경
+	 * @param loginMember
+	 * @return
+	 */
+	int secession(Member loginMember);
 
 }

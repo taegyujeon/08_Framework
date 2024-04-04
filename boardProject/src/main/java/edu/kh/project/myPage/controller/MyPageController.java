@@ -1,5 +1,7 @@
 package edu.kh.project.myPage.controller;
 
+import java.io.IOException;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,6 +10,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import edu.kh.project.member.model.dto.Member;
@@ -15,6 +20,7 @@ import edu.kh.project.myPage.model.service.MyPageService;
 import lombok.RequiredArgsConstructor;
 import oracle.jdbc.proxy.annotation.Post;
 
+@SessionAttributes({"loginMember"})
 @Controller
 @RequestMapping("myPage")
 @RequiredArgsConstructor
@@ -162,6 +168,92 @@ public class MyPageController {
 		ra.addFlashAttribute("message",message);
 		
 		return "redirect:/" + path;
+	}
+	
+	
+	// @SessionAttributes:
+	// - Model에 세팅된 값 중 key가 일치하는 값을
+	//   request -> session으로 변경
+	
+	// SessionStatus:
+	// - @SessionAttributes를 이용해서 올라간 데이터의 상태를 관리하는 객체
+	// -> 해당 컨트롤러에 @SessionAttributes({"key1","key2"})가 작성되어 있는 경우
+	//    () 내 key1,key2의 상태를 관리
+	
+	/** 회원 탈퇴
+	 * @param memberPw : 입력 받은 비밀번호
+	 * @param loginMember : 로그인한 회원 정보(세션)
+	 * @param status : 세션 완료(없애기) 용도의 객체
+	 *             -> @SessionAttributes 로 등록된 세션을 완료
+	 * @return
+	 */
+	@PostMapping("secession")
+	public String secession(
+			@RequestParam("memberPw") String memberPw,
+			@SessionAttribute("loginMember") Member loginMember,
+			SessionStatus status,
+			RedirectAttributes ra) {
+		
+		int result = service.selectPw(memberPw,loginMember);
+		
+		String message = null;
+		String path = null;
+		
+		if(result > 0) {
+			message = "탈퇴 되었습니다.";
+			path = "/";
+		
+			status.setComplete();
+			
+		}else {
+			message = "비밀번호가 일치하지 않습니다.";
+			path = "secession";
+		}
+		
+		ra.addFlashAttribute("message", message);
+		
+		return "redirect:" + path;
+	}
+	
+	// --------------------------------------------------------------------
+	
+	/* 파일 업로드 테스트*/
+	
+	@GetMapping("fileTest")
+	public String fileTest() {
+		return "myPage/myPage-fileTest";
+	}
+	
+	
+	/** Spring 에서 파일 업로드를 처리하는 방법
+	 * 
+	 * - enctype="multipart/form-data" 로 클라이언트 요청을 받으면
+	 *   (문자, 숫자, 파일 등이 섞여있는 요청)
+	 *   
+	 *   이를 MultipartResolver를 이용해서 
+	 *   섞여있는 파라미터를 분리
+	 *   문자열,숫자 -> String
+	 *   파일        -> MultipartFile
+	 * @throws IOException 
+	 * @throws IllegalStateException 
+	 * 
+	 */
+	
+	// 파일 업로드 테스트 1
+	@PostMapping("file/test1")
+	public String fileUpload1(
+			@RequestParam("uploadFile") MultipartFile uploadFile,
+			RedirectAttributes ra
+			) throws IllegalStateException, IOException {
+		
+		String path = service.fileUpload1(uploadFile);
+		
+		// 파일이 저장되어 웹에서 접근할 수 있는 경로가 반환 되었을 때
+		if(path != null) {
+			ra.addFlashAttribute("path",path);
+		}
+		
+		return "redirect:/myPage/fileTest";
 	}
 	
 	

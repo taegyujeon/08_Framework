@@ -165,7 +165,77 @@ selectMemberList.addEventListener("click", () => {
     //    조회된 JS 객체 배열을 이용해
     //    tbody에 들어갈 요소를 만들고 값 세팅 후 추가
   
+});
+
+
+
+  // ---------------------------------------------------------------------------
+
+  /* 특정 회원 비밀번호 초기화(Ajax) */
+
+  const resetMemberNo = document.querySelector("#resetMemberNo");
+  const resetPw = document.querySelector("#resetPw");
+
+  resetPw.addEventListener("click", () => {
+
+    // 입력 받은 회원 번호 얻어오기
+    const inputNo = resetMemberNo.value;
+
+    if(inputNo.trim().length == 0){
+        alert("회원 번호를 입력해 주세요");
+        return;
+    }
+
+    fetch("/resetPw",{
+        method: "PUT", // PUT : 수정 요청 방식
+        headers: {"Content-Type" : "application/json"},
+        body: inputNo
+    })
+
+    .then(resp => resp.text())
+    .then(result =>{
+        // result == 컨트롤러로 부터 반환 받아 TEXT로 파싱한 값
+
+        if(result > 0) alert("초기화 성공");
+        else           alert("해당 회원이 존재하지 않습니다");
+
+    });
+
+
   });
+
+  // ---------------------------------------------------------------------
+  /* 특정 회원(회원번호) 탈퇴 복구(Ajax) */
+
+  const secessionMember = document.querySelector("#secessionMember");
+  const restore = document.querySelector("#restore");
+
+  restore.addEventListener("click", ()=>{
+
+    const inputNo = secessionMember.value;
+
+    if(inputNo.trim().length == 0){
+        alert("회원 번호를 입력해 주세요");
+        return;
+    }
+
+    fetch("/restore",{
+        method: "PUT", 
+        headers: {"Content-Type" : "application/json"},
+        body: inputNo
+    })
+
+    .then(resp => resp.text())
+    .then(result =>{
+
+        if(result > 0) alert("회원 복구 성공");
+        else           alert("해당 회원이 존재하지 않습니다");
+
+    });
+
+
+  });
+
 
 
 

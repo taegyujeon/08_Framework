@@ -429,3 +429,7 @@ label[for="headerMenuToggle"]:hover{
     color: white;
     background-color: #455ba8;
 }
+
+.content-1 hr{
+    margin: 20px 0;
+}

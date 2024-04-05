@@ -1,5 +1,7 @@
 package edu.kh.project.member.model.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,6 +16,8 @@ import lombok.ToString;
 @Setter // 커맨드 객체(
 @NoArgsConstructor // 기본생성자(커맨드 객체)
 @ToString
+@Builder
+@AllArgsConstructor
 public class Member {
 	   private int memberNo;
 	   private String memberEmail;

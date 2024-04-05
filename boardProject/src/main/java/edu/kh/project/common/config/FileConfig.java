@@ -9,6 +9,7 @@ import org.springframework.util.unit.DataSize;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import jakarta.servlet.MultipartConfigElement;
 
@@ -17,7 +18,7 @@ import jakarta.servlet.MultipartConfigElement;
 
 @Configuration
 @PropertySource ("classpath:/config.properties")
-public class FileConfig {
+public class FileConfig implements WebMvcConfigurer {
 	
 	// config.properties에 작성된 파일 업로드 임계값 얻어와 필드에 대입
 	@Value("${spring.servlet.multipart.file-size-threshold}")
@@ -32,14 +33,25 @@ public class FileConfig {
 	@Value("${spring.servlet.multipart.location}")
 	private String location; // 임계값 초과 시 임시 저장 폴더 경로
 	
+	@Value("${my.profile.resource-handler}")
+	private String profileResourceHandler; // 프로필 이미지 요청 주소 
+	
+	@Value("${my.profile.resource-location}")
+	private String profileResourceLocation; // 프로필 이미지 요청 시 연결할 서버 폴더 경로
+	
 	
 	// 요청 주소에 따라 
 	// 서버 컴퓨터의 어떤 경로에 접근할 지 설정
+	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		
 		registry
 		.addResourceHandler("/myPage/file/**") // 클라이언트 요청 주소 패턴
 		.addResourceLocations("file:///C:\\uploadFiles\\test\\");
+		
+		// 프로필 이미지 요청 - 서버 폴더 연결 추가
+		registry
+		.addResourceHandler(profileResourceHandler)     // /myPage/profile
+		.addResourceLocations(profileResourceLocation); // myPage/profile
 		
 	}
 	

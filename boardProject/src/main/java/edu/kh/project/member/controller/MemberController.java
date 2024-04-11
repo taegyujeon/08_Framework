@@ -160,7 +160,7 @@ public class MemberController {
 	 * @param inputMember: 입력된 회원 정보
 	 * 	(memberEmail, memberPw, memberNickname, memberTel)
 	 * 
-	 * @param memberAddress: 입력한 주고 input 3개의 값을 배열로 전달
+	 * @param memberAddress: 입력한 주소 input 3개의 값을 배열로 전달
 	 * 
 	 * @param ra: 리다이렉트 시 request scope로 데이터 전달하는 객체
 	 * @return 

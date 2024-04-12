@@ -587,26 +587,6 @@ FROM DUAL;
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 -----------------------------------------------------------------------------------------------------------------------
 /* 책 관리 프로젝트 (연습용) */
 
@@ -722,11 +702,85 @@ SELECT * FROM CUSTOMER c ;
 
 
 
+-------------------------------------------------------------------------------------------------------
+
+/* BOARD_IMG 테이블용 시퀀스 생성 */
+CREATE SEQUENCE SEQ_IMG_NO NOCACHE;
+
+/* BOARD_IMG 테이블에 샘플 데이터 삽입 */
+INSERT INTO "BOARD_IMG" VALUES(
+	SEQ_IMG_NO.NEXTVAL , '/images/board','원본1.jpg','test1.jpg',0,1997
+);
+
+INSERT INTO "BOARD_IMG" VALUES(
+	SEQ_IMG_NO.NEXTVAL , '/images/board','원본2.jpg','test2.jpg',1,1997
+);
+
+INSERT INTO "BOARD_IMG" VALUES(
+	SEQ_IMG_NO.NEXTVAL , '/images/board','원본3.jpg','test3.jpg',2,1997
+);
+
+INSERT INTO "BOARD_IMG" VALUES(
+	SEQ_IMG_NO.NEXTVAL , '/images/board','원본4.jpg','test4.jpg',3,1997
+);
+
+INSERT INTO "BOARD_IMG" VALUES(
+	SEQ_IMG_NO.NEXTVAL , '/images/board','원본5.jpg','test5.jpg',4,1997
+);
+
+
+COMMIT;
+
+
+-----------------------------------------------------------------------------------------------
+/* 게시글 상세 조회 */
+SELECT BOARD_NO , BOARD_TITLE , BOARD_CONTENT , BOARD_CODE ,
+			 BOARD_COUNT , MEMBER_NICKNAME ,PROFILE_IMG , 
+			 TO_CHAR(BOARD_WRITE_DATE , 'YYYY"년" MM"월" DD"일" HH24:MI:SS') BOARD_WRITE_DATE 
+			 TO_CHAR(BOARD_UPDATE_DATE , 'YYYY"년" MM"월" DD"일" HH24:MI:SS') BOARD_UPDATE_DATE
+			 
+			 (SELECT COUNT(*) FROM BOARD_LIKE
+			 WHERE BOARD_NO = 1998) LIKE COUNT,
+			 
+			(SELECT IMG_PATH || IMG_RENAME 
+			 FROM "BOARD_IMG"
+			 WHERE BOARD_NO = 1998
+			 AND   IMG_ORDER = 0) THUMBNAIL
+			 
+FROM "BOARD"
+JOIN "MEMEBER" USING(MEMBER_NO)
+WHERE BOARD_DEL_FL = 'N'
+AND BOARD_CODE = 1
+AND BOARD_NO = 1998
+;
 
 
 
+-------------------------------------------------------
+/* 상세조회 되는 게시글의 모든 이미지 조회 */
+SELECT *
+FROM "BOARD_IMG"
+WHERE BOARD_NO = 1997
+ORDER BY IMG_ORDER;
 
+/* 상세조회 되는 게시글의 모든 댓글 조회 */
 
+/* 계층형 쿼리 */
+
+SELECT LEVEL, C.* FROM
+      (SELECT COMMENT_NO, COMMENT_CONTENT,
+          TO_CHAR(COMMENT_WRITE_DATE, 'YYYY"년" MM"월" DD"일" HH24"시" MI"분" SS"초"') COMMENT_WRITE_DATE,
+          BOARD_NO, MEMBER_NO, MEMBER_NICKNAME, PROFILE_IMG, PARENT_COMMENT_NO, COMMENT_DEL_FL
+      FROM "COMMENT"
+      JOIN MEMBER USING(MEMBER_NO)
+      WHERE BOARD_NO = 1998) C
+   WHERE COMMENT_DEL_FL = 'N'
+   OR 0 != (SELECT COUNT(*) FROM "COMMENT" SUB
+               WHERE SUB.PARENT_COMMENT_NO = C.COMMENT_NO
+               AND COMMENT_DEL_FL = 'N')
+   START WITH PARENT_COMMENT_NO IS NULL
+   CONNECT BY PRIOR COMMENT_NO = PARENT_COMMENT_NO
+   ORDER SIBLINGS BY COMMENT_NO;
 
 
 

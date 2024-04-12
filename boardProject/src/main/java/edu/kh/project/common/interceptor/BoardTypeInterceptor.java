@@ -47,10 +47,12 @@ public class BoardTypeInterceptor implements HandlerInterceptor{
 		
 		// application scope 객체 얻어오기
 		ServletContext application = request.getServletContext();
-		log.info("BoardTypeIntercepter - postHandle(전처리) 동작 실행");
+		
 		
 		// application scope에 "boardTypeList"가 없을 경우
 		if(application.getAttribute("boardTypeList") == null) {
+			
+			log.info("BoardTypeIntercepter - postHandle(전처리) 동작 실행");
 			
 			// boardTypeList 조회 서비스 호출
 			List<Map<String, Object>> boardTypeList 

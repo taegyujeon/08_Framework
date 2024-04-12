@@ -21,6 +21,15 @@
 
             <h1 class="board-name" th:text="${boardName}">게시판 이름</h1>
 
+            <!-- apllication, request scope 값 이용 방법 -->
+            <th:block th:each="boardType : ${application.boardTypeList}">
+                <h1 class="board-name"
+                th:if="${boardType.boardCode} == ${boardCode}"
+                th:text="${boardType.boardName}">
+
+                </h1>
+            </th:block>
+
             <!-- 검색 구현 후 사용 -->
             <!-- <h3 style="margin:30px">OOO 검색 결과</h3> -->
 
@@ -40,35 +49,47 @@
 
                     <tbody>
                         <!-- 게시글이 존재하지 않을 때 -->
-                        <tr>
+
+                       <!-- 여러 행 조회 시 결과가 없을 경우 == List가 비어있음 -->
+                       
+                       <!-- "${boardList.size() == 0}" -->
+                       
+                       <!-- #lists : 타임리프에서 list 관련 기능을 제공하는 객체 -->
+                       <th:block th:if="${#lists.isEmpty(boardList)}">
+                          <tr>
                             <th colspan="6">게시글이 존재하지 않습니다.</th>
-                        </tr>
+                          </tr>
+                       </th:block>
 
 
 
                         <!-- 게시글이 존재할 때 -->
-                        <tr>
-                            <td>게시글 번호</td>
-                            <td> 
-                               <!-- 썸네일 추가 예정 -->
+                        <th:block th:unless="${#lists.isEmpty(boardList)}">
+                            <tr th:each="board: ${boardList}" th:object="${board}">
+                                <td th:text="*{boardNo}">게시글 번호</td>
+                                <td> 
+                                   <!-- 썸네일 추가 예정 -->
 
-                               <a href="#">게시글 제목</a>
-                               [0] <!-- 댓글 수 -->
-                            </td>
-
-                            <!-- 작성자 닉네임 -->
-                            <td>닉네임</td>
-
-                             <!-- 작성일 -->
-                            <td>2023-10-26</td>
-
-                            <!-- 조회수 -->
-                            <td>0</td>
-
-                            <!-- 좋아요 수 -->
-                            <td>0</td>
-
-                        </tr>
+                                   <!-- 상세 조회 주소에 cp가 포함된 이유 : 상세 -> 목록 돌아올 때 사용 -->
+                                   <a th:href="@{/board/{boardCode}/{boardNo} (boardCode=${boardCode}, boardNo=*{boardNo}, cp=${pagination.currentPage})}"  
+                                   th:text="*{boardTitle}">게시글 제목</a>
+                                   <th:block th:text="|[*{commentCount}]|">댓글 수</th:block> <!-- 댓글 수 -->
+                                </td>
+    
+                                <!-- 작성자 닉네임 -->
+                                <td th:text="*{memberNickname}">닉네임</td>
+    
+                                 <!-- 작성일 -->
+                                <td th:text="*{boardWriteDate}">2023-10-26</td>
+    
+                                <!-- 조회수 -->
+                                <td th:text="*{readCount}">0</td>
+    
+                                <!-- 좋아요 수 -->
+                                <td th:text="*{likeCount}">0</td>
+    
+                            </tr>
+                        </th:block>
                     </tbody>
                 </table>
             </div>
@@ -86,36 +107,36 @@
             <!-- 게시글이 있을 때만 페이지네이션이 보이게 할 예정 -->
             <div class="pagination-area">
 
-                <ul class="pagination">
+                <ul class="pagination" th:object="${pagination}">
                 
                     <!-- 첫 페이지로 이동 -->
-                    <li><a href="#">&lt;&lt;</a></li>
+                    <li><a th:href="@{/board/{boardCode}(boardCode = ${boardCode}, cp=1)}">&lt;&lt;</a></li>
 
                     <!-- 이전 목록 마지막 번호로 이동 -->
-                    <li><a href="#">&lt;</a></li>
+                    <li><a th:href="@{/board/{boardCode} (boardCode=${boardCode}, cp=*{prevPage})}">&lt;</a></li>
 
                     <!-- 특정 페이지로 이동 -->
-                    <!-- 현재 보고있는 페이지 -->
-                    <li>
-                        <a class="current">1</a>
-                    </li>
-
-                    <!-- 보고있지 않은 페이지 -->                    
-                    <li> <a href="#">2</a> </li>
-                    <li> <a href="#">3</a> </li>
-                    <li> <a href="#">4</a> </li>
-                    <li> <a href="#">5</a> </li>
-                    <li> <a href="#">6</a> </li>
-                    <li> <a href="#">7</a> </li>
-                    <li> <a href="#">8</a> </li>
-                    <li> <a href="#">9</a> </li>
-                    <li> <a href="#">10</a> </li>
+                    <!-- <th:block th:each=" i : ${#numbers.sequence(pagination.startPage, pagination.endPage)}"> -->
+                        <th:block th:each="i : *{#numbers.sequence(startPage, endPage)}">
+                        <!-- 현재 보고있는 페이지 -->
+                        <!-- <li th:if="${i == pagination.currentPage}"> -->
+						<li th:if="${i} == *{currentPage}">
+                            <a class="current" th:text="${i}">현재 페이지</a>
+                        </li>
+    
+                        <!-- 보고있지 않은 페이지 -->                    
+						<!-- <li th:unless="${i == pagination.currentPage}">  -->
+                        <li th:unless="${i} == *{currentPage}">
+                            <a th:href="@{/board/{boardCode}(boardCode=${boardCode},cp=${i})}" 
+                            th:text="${i}">이동할 페이지</a>
+                        </li>
+                    </th:block>
 
                     <!-- 다음 목록 시작 번호로 이동 -->
-                    <li><a href="#">&gt;</a></li>
+                    <li><a th:href="@{/board/{boardCode} (boardCode=${boardCode}, cp=*{nextPage})}">&gt;</a></li>
 
                     <!-- 끝 페이지로 이동 -->
-                    <li><a href="#">&gt;&gt;</a></li>
+                    <li><a th:href="@{/board/{boardCode} (boardCode=${boardCode}, cp=*{maxPage})}">&gt;&gt;</a></li>
                 </ul>
             </div>
 

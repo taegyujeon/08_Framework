@@ -65,3 +65,21 @@ boardLike.addEventListener("click", e => {
 
 
 });
+
+
+/* --- 게시물 삭제하기--- */
+
+const deleteBtn = document.querySelector("#deleteBtn");
+deleteBtn.addEventListener("click", e => {
+
+  const boardCode = location.pathname.split("/")[2]
+
+  if(confirm("삭제하시겠습니까?")){
+    location.href = `/editBoard/${boardCode}/${boardNo}/delete`;
+  }else{
+    alert("취소됨");
+  }
+
+  
+
+});

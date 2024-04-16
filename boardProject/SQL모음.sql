@@ -745,7 +745,11 @@ SELECT BOARD_NO , BOARD_TITLE , BOARD_CONTENT , BOARD_CODE ,
 			(SELECT IMG_PATH || IMG_RENAME 
 			 FROM "BOARD_IMG"
 			 WHERE BOARD_NO = 1997
-			 AND   IMG_ORDER = 0) THUMBNAIL
+			 AND   IMG_ORDER = 0) THUMBNAIL,
+			 
+			 (SELECT COUNT(*) FROM "BOARD_LIKE"
+			  WHERE MEMBER_NO = NULL 
+			  AND BOARD_NO = 1) LIKE_CHECK
 			 
 FROM "BOARD"
 JOIN "MEMEBER" USING(MEMBER_NO)
@@ -781,6 +785,61 @@ SELECT LEVEL, C.* FROM
    START WITH PARENT_COMMENT_NO IS NULL
    CONNECT BY PRIOR COMMENT_NO = PARENT_COMMENT_NO
    ORDER SIBLINGS BY COMMENT_NO;
+
+  
+-----------------------------------------------------------------------------------------
+
+/* 좋아요 테이블(BOARD_LIKE) 샘플 데이터 추가 */
+INSERT INTO "BOARD_LIKE"
+VALUES(1,1997); -- 1번 회원이 1997번 글에 좋아요를 클릭함
+
+COMMIT;
+
+-- 좋아요 여부 확인 (  1:O  /  2:X  )
+SELECT COUNT(*) FROM "BOARD_LIKE"
+WHERE MEMBER_NO = 22
+AND BOARD_NO = 1997;
+
+SELECT * FROM "BOARD_LIKE";
+
+
+/* 여러 행을 한번에 삽입하는 방법! -> INSERT + SUBQUERY */
+
+-- ORA-02287: 시퀀스 번호는 이 위치에 사용할 수 없습니다
+--> 시퀀스로 번호 생성하는 부분을 별도 함수로 분리 후 호출하면 문제 없음
+
+INSERT INTO "BOARD_IMG"
+(
+SELECT SEQ_IMG_NO.NEXTVAL,'경로1','원본1','변경1',1,1999 FROM DUAL
+UNION
+SELECT SEQ_IMG_NO.NEXTVAL,'경로2','원본2','변경2',2,1999 FROM DUAL
+UNION
+SELECT SEQ_IMG_NO.NEXTVAL,'경로3','원본3','변경3',3,1999 FROM DUAL
+);
+
+ROLLBACK;
+
+-- SEQ_IMG_NO 시퀀스의 다음 값을 반환 하는 함수 생성
+CREATE OR REPLACE FUNCTION NEXT_IMG_NO
+
+-- 반환형
+RETURN NUMBER 
+
+-- 사용할 변수
+IS IMG_NO NUMBER;
+
+BEGIN 
+	SELECT SEQ_IMG_NO.NEXTVAL
+	INTO IMG_NO
+	FROM DUAL;
+
+	RETURN IMG_NO;
+END;
+;
+
+
+SELECT NEXT_IMG_NO() FROM DUAL;
+
 
 
 

@@ -1,9 +1,9 @@
 package edu.kh.project.board.controller;
 
-import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -186,24 +186,25 @@ public class BoardController {
 					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
 					// java.util.Date
-					Date a = new Date(result); // 현재 시간
+					Date a = new Date(); // 현재 시간
 
 					Date temp = new Date(cal.getTimeInMillis()); // 다음날 (24시간 후)
-					// 2024-04-15 12:30:10
+					// 2024-04-16 12:30:10
 
-					Date b = (Date) sdf.parse(sdf.format(temp)); // 다음날 0시 0분 0초
+					Date b = sdf.parse(sdf.format(temp)); // 다음날 0시 0분 0초
 
 					// 다음날 0시 0분 0초 - 현재 시간
 					long diff = (b.getTime() - a.getTime()) / 1000;
 					// -> 다음날 0시 0분 0초까지 남은 시간을 초단위로 반환
 
+					log.debug("diff {}", diff);
+					
 					c.setMaxAge((int) diff); // 수명 설정
 
 					resp.addCookie(c); // 응답 객체를 이용해서 클라이언트에게 전달
 					
+					
 				}
-				
-				
 				
 			}
 			

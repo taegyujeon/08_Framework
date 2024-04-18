@@ -120,9 +120,10 @@
                     ${객체?.필드} : 안전 탐색 연산자(Safe Navigation Operator)
                     객체가 null인지 판별해서 null이 아닌 경우에 수행
                  -->
-                <th:block th:if="${board.memberNo == session.loginMember?.memberNo}"> 
-                <button id="updateBtn">수정</button>
-                <button id="deleteBtn">삭제</button>
+                 <th:block th:if="${board.memberNo == session.loginMember?.memberNo}">             
+                    <button id="updateBtn">수정</button>
+                    <button id="deleteBtn">삭제(GET)</button>
+                    <button id="deleteBtn2">삭제(POST)</button>
                 </th:block>
 
                 <button id="goToListBtn">목록으로</button>
@@ -158,7 +159,7 @@
         /* 현재 게시글 좋아요 여부(boardLike)를 전역 변수로 저장 */
         let likeCheck = /*[[${board.likeCheck}]]*/ "좋아요 여부";
 
-
+        const userDefaultImage = /*[[#{user.default.image}]]*/ "기본이미지";
     </script>
 
 

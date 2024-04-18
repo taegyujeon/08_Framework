@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.multipart.MultipartFile;
@@ -124,24 +125,45 @@ public class EditBoardController {
 	
 	
 	
-	@GetMapping("{boardCode:[0-9]+}/{boardNo:[0-9]+}/delete")
+	/* 게시글 삭제 */
+
+	//	@GetMapping("{boardCode:[0-9]+}/{boardNo:[0-9]+}/delete")
+	//	@PostMapping("{boardCode:[0-9]+}/{boardNo:[0-9]+}/delete")
+
+
+	// 하나의 요청 주소로 GET, POST 주소를 모두 처리하는 방법
+	@RequestMapping(value="{boardCode:[0-9]+}/{boardNo:[0-9]+}/delete",
+					method = {RequestMethod.GET, RequestMethod.POST})
 	public String boardDelete(
-			@PathVariable("boardCode") int boardCode,
-			@PathVariable("boardNo") int boardNo
-			) {
-		
-		int result = service.boardDelete(boardNo);
-		
+		@PathVariable("boardCode") int boardCode,
+		@PathVariable("boardNo") int boardNo,
+		@RequestParam(value="cp", required = false, defaultValue = "1") int cp,
+		@SessionAttribute("loginMember") Member loginMember,
+		RedirectAttributes ra
+		) {
+
+		Map<String, Integer> map = new HashMap<>();
+		map.put("boardCode", boardCode);
+		map.put("boardNo", boardNo);
+		map.put("memberNo", loginMember.getMemberNo());
+
+
+		int result = service.boardDelete(map);
+
 		String path = null;
-		
+		String message = null;
+
 		if(result > 0) {
-			path = "redirect:/board/" + boardCode;
+			path = String.format("/board/%d", boardCode);
+			message = "삭제 되었습니다";
 		}else {
-			path = "redirect:/board/" + boardCode + boardNo;
+			path = String.format("/board/%d/%d?cp=%d", boardCode, boardNo, cp);
+			message = "삭제 실패";
 		}
-		
-		
-		return path;
+
+		ra.addFlashAttribute("message", message);
+
+		return "redirect:" + path;
 	}
 	
 	

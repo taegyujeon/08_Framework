@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>회원 가입</title>
+
+  <style>
+    /* 여기에 CSS 코드를 작성합니다 */
+    /* 예를 들어, body 태그에 대한 스타일을 추가할 수 있습니다 */
+   /* body 태그 스타일 */
+body {
+  display: flex;
+  justify-content: center; /* 가로 중앙 정렬 */
+  align-items: center; /* 세로 중앙 정렬 */
+  height: 100vh; /* 뷰포트의 전체 높이를 차지하도록 합니다 */
+  margin: 0; /* 기본 마진을 제거합니다 */
+}
+
+/* 메인 컨테이너 스타일 */
+main {
+  width: 80%; /* 필요에 따라 너비 조정 */
+  max-width: 600px; /* 최대 너비 제한 */
+  background-color: #f9f9f9; /* 배경색 설정 */
+  padding: 20px; /* 내부 여백 설정 */
+  border-radius: 8px; /* 둥근 모서리 추가 */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* 그림자 효과 추가 */
+}
+
+/* 가입 폼 컨테이너 스타일 */
+.signUp-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 입력란 스타일 */
+input[type="text"],
+input[type="password"],
+input[type="submit"],
+button {
+  width: calc(100% - 20px); /* 입력란이 컨테이너를 가득 채우도록 합니다 */
+  padding: 10px; /* 내부 여백 설정 */
+  margin-bottom: 20px; /* 아래쪽 여백 설정 */
+  border: 1px solid #ccc; /* 테두리 설정 */
+  border-radius: 8px; /* 둥근 모서리 추가 */
+  box-sizing: border-box; /* 박스 크기 설정 */
+}
+
+/* 가입 완료 버튼 스타일 */
+input[type="submit"] {
+  background-color: #28a745; /* 배경색 설정 */
+  color: #fff; /* 텍스트 색상 설정 */
+  border: none; /* 테두리 제거 */
+  cursor: pointer; /* 커서 모양 설정 */
+}
+
+/* 다른 버튼 스타일 */
+button {
+  background-color: #007bff; /* 배경색 설정 */
+  color: #fff; /* 텍스트 색상 설정 */
+  border: none; /* 테두리 제거 */
+  cursor: pointer; /* 커서 모양 설정 */
+}
+
+/* 버튼 호버 효과 설정 */
+input[type="submit"]:hover,
+button:hover {
+  background-color: #0056b3; /* 호버 시 배경색 변경 */
+}
+
+/* 정규표현식 메시지 스타일 */
+.signUp-message {
+  font-size: 14px; /* 폰트 크기 조정 */
+  color: #999; /* 색상 조정 */
+  margin-top: 5px; /* 위쪽 여백 추가 */
+  margin-bottom: 10px; /* 아래쪽 여백 추가 */
+  margin-left: 10px; /* 왼쪽 여백 추가 */
+}
+  </style>
+</head>
+<body>
+
+  <main>
+    <!-- 헤더 추가 -->
+    <th:block th:replace="~{common/header}"></th:block>
+
+    <section class="signUp-content">
+
+      <form action="/member/signup" method="POST" name="signUpForm" id="signUpForm">
+
+        <!-- 아이디 입력 -->
+        <label for="memberId">
+            <span class="required">*</span> 아이디
+        </label>
+
+        <div>
+            <input type="text" name="memberId" id="memberId"
+            placeholder="아이디" maxlength="30" autocomplete="off">
+            <button id="doubleCheck" type="button">중복확인</button>
+        </div>
+
+
+        <!-- 비밀번호/비밀번호 확인 입력 -->
+        <label for="memberPw">
+          <span class="required">*</span> 비밀번호
+        </label>
+
+        <div class="signUp-input-area">
+          <input type="password" name="memberPw" id="memberPw" 
+          placeholder="비밀번호" maxlength="20" >
+        </div>
+        <div class="signUp-input-area">
+          <input type="password" name="memberPwConfirm" id="memberPwConfirm" 
+          placeholder="비밀번호 확인" maxlength="20" >
+        </div>
+
+        <!-- 정규 표현식 -->
+        <span class="signUp-message" id="pwMessage">영어,숫자,특수문자(!,@,#,-,_) 6~20글자 사이로 입력해주세요.</span>
+
+        <!-- 닉네임 입력 -->
+        <label for="memberNickname">
+          <span class="required">*</span> 닉네임
+        </label>
+
+        <div class="signUp-input-area">
+          <input type="text" name="memberNickname" id="memberNickname" placeholder="닉네임" maxlength="10" >
+        </div>
+
+        <span class="signUp-message" id="nickMessage">한글,영어,숫자로만 2~10글자</span>
+
+
+        <!-- 휴대폰 번호 입력 -->
+        <label for="memberTel">
+          <span class="required">*</span> 휴대폰 번호
+        </label>
+
+        <div class="signUp-input-area">
+          <input type="text" name="memberTel" id="memberTel" placeholder="(- 없이 숫자만 입력)" maxlength="11">
+        </div>
+
+        <span class="signUp-message" id="telMessage">휴대폰 번호를 입력해주세요.(- 제외)</span>
+
+
+        <!-- 이메일 입력 -->
+        <label for="memberEmail">
+            <span class="required">*</span> 이메일
+          </label>
+  
+          <div class="signUp-input-area">
+            <input type="text" name="memberEmail" id="memberEmail" 
+            placeholder="이메일" maxlength="30" autocomplete="off">
+            <button id="sendAuthKeyBtn" type="button">인증번호 받기</button>
+          </div>
+          <span class="signUp-message" id="emailMessage">메일을 받을 수 있는 이메일을 입력해주세요.</span>
+  
+  
+  
+          <!-- 인증번호 입력 -->
+          <label for="emailCheck">
+            <span class="required">*</span> 인증번호
+          </label>
+  
+          <div class="signUp-input-area">
+            <input type="text" name="authKey" id="authKey" placeholder="인증번호 입력" maxlength="6" autocomplete="off" >
+            <button id="checkAuthKeyBtn" type="button">인증하기</button>
+          </div>
+          <span class="signUp-message" id="authKeyMessage"></span>
+          <!-- 인증번호가 일치하지 않습니다 -->
+
+        <!-- 가입 완료 버튼 -->
+        <input type="submit" value="가입 완료" style="background-color: #57dcfe; color: #fff; border: none; border-radius: 8px; padding: 10px; cursor: pointer; transition: background-color 0.3s;">
+      </form>
+    </section>
+  </main>
+
+</body>
+</html>

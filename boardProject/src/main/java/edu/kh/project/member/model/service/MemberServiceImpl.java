@@ -120,6 +120,7 @@ public class MemberServiceImpl implements MemberService{
 		
 		// 조회된 비밀번호 null로 변경
 		loginMember.setMemberPw(null);
+		
 		return loginMember;
 	}
 	

@@ -8,7 +8,8 @@
 			<li class="comment-row" 
 					th:each="comment : ${board.commentList}" 
 					th:classappend="${comment.parentCommentNo} != 0 ? child-comment"
-					th:object="${comment}">
+					th:object="${comment}"
+					th:id="|c*{commentNo}|">
 
 				<th:block th:if="*{commentDelFl} == 'Y'">
 					삭제된 댓글 입니다

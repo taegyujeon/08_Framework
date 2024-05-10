@@ -31,7 +31,12 @@
    -->
    	
   <!-- 댓글/자식 댓글 등록 -->
-  <insert id="insert">
+  <insert id="insert" parameterType="Comment"  useGeneratedKeys="true">
+  
+  		<selectKey order="BEFORE" resultType="_int" keyProperty="commentNo">
+  			SELECT SEQ_COMMENT_NO.NEXTVAL FROM DUAL	  		
+  		</selectKey>
+  
   		INSERT INTO "COMMENT"	
 		VALUES( SEQ_COMMENT_NO.NEXTVAL, #{commentContent},
 			  DEFAULT, DEFAULT, #{boardNo},

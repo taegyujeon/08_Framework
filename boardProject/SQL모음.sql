@@ -1271,6 +1271,49 @@ SELECT CHATTING_NO
 		ORDER BY MAX_MESSAGE_NO DESC NULLS LAST
 
 
+		
+		
+		
+		
+
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 
 
 

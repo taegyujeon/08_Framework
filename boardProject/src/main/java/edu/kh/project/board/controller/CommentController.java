@@ -1,4 +1,4 @@
-package edu.kh.project.board.controller;
+	package edu.kh.project.board.controller;
 
 import java.util.List;
 
